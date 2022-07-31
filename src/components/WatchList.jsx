@@ -1,4 +1,4 @@
-import { useRef } from "react";
+// import { useRef } from "react";
 
 const WatchList = ({
   watchlist,
@@ -8,8 +8,7 @@ const WatchList = ({
   deleteWatchlists,
   setToggleWatchlist,
 }) => {
-  const titleRef = useRef(null);
-
+  // const titleRef = useRef(null);
   return (
     <div className="watchlist__container">
       <div className="watchlist__clear__div">
@@ -46,9 +45,9 @@ const WatchList = ({
           <input
             className="watchedlist__checkbox"
             type="checkbox"
-            onClick={() => deleteToWatchedlist({ id, titleRef })}
+            onClick={(e) => deleteToWatchedlist(e, id)}
           />
-          <p ref={titleRef}>{title}</p>
+          <p>{title}</p> {/*ref={titleRef}*/}
         </div>
       ))}
     </div>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import MediaCard from "./MediaCard";
 import WatchList from "./WatchList";
@@ -9,7 +9,6 @@ const Home = () => {
   const [watchlist, setWatchlist] = useState([]);
   const [watchedlist, setWatchedlist] = useState([]);
   const [toggleWatchlist, setToggleWatchlist] = useState(false);
-  const titleRef = useRef(null);
 
   const addToWatchlist = (media) => {
     const { id, title } = media;
@@ -43,11 +42,12 @@ const Home = () => {
     deleteToWatchlist(id);
   };
 
-  const deleteToWatchedlist = (media) => {
-    const { id, titleRef } = media;
+  const deleteToWatchedlist = (e, id) => {
+    // titleRef.current.classList.add("deleted");
 
-    console.log(titleRef.current);
-    titleRef.current.classList.add("deleted");
+    // console.log(e.target.nextSibling);
+    e.target.nextSibling.classList.add("deleted");
+
     setTimeout(() => {
       setWatchedlist((prevList) => {
         if (!prevList.some((e) => e.id === id)) {
@@ -73,8 +73,8 @@ const Home = () => {
 
   const url_series = `https://api.themoviedb.org/3/tv/popular?api_key=${process.env.REACT_APP_API_KEY}`;
 
-  const fetchPopularMovies = async () => {
-    const res = await fetch(url_movies);
+  const fetchPopularMovies = async (url) => {
+    const res = await fetch(url);
     const movies = (await res.json()).results;
     setPopularMovies(
       movies.map((movie) => {
@@ -88,8 +88,8 @@ const Home = () => {
     );
   };
 
-  const fetchPopularSeries = async () => {
-    const res = await fetch(url_series);
+  const fetchPopularSeries = async (url) => {
+    const res = await fetch(url);
     const series = (await res.json()).results;
 
     setPopularSeries(
@@ -105,9 +105,9 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetchPopularMovies();
-    fetchPopularSeries();
-  }, []);
+    fetchPopularMovies(url_movies);
+    fetchPopularSeries(url_series);
+  }, [url_movies, url_series]);
 
   return (
     <div>
@@ -147,7 +147,6 @@ const Home = () => {
             deleteToWatchedlist={deleteToWatchedlist}
             deleteWatchlists={deleteWatchlists}
             setToggleWatchlist={setToggleWatchlist}
-            titleRef={titleRef}
           />
         )}
       </div>
